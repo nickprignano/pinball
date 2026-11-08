@@ -31,4 +31,7 @@ Four rules after the community "Karpathy guidelines" (MIT), reworded for agents 
 
 ## Checks to run
 
-None yet. The first build PR adds the table checker and tests, and lists them here.
+```bash
+node --test
+node tools/check-table.mjs tables/*.json
+```

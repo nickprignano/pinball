@@ -1,0 +1,18 @@
+name: check
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Pinned so the seeded smoke test gives the same results every run.
+          node-version: 22.22.0
+      - run: node --test
+      - run: node tools/check-table.mjs tables/*.json
