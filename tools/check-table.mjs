@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Table checker: node tools/check-table.mjs tables/<id>.json [more tables...]
+// Table checker: node tools/check-table.mjs [tables/<id>.json ...]
+// With no arguments it checks every table listed in tables/index.json.
 // Checks a table loads, launches, and survives a seeded smoke test with random flipper presses.
 // Part of a JS port of Vector Pinball (https://github.com/dozingcat/Vector-Pinball), GPL-3.0-only.
 
@@ -97,10 +98,9 @@ export async function checkTable(path, { balls = 30, seed = 1 } = {}) {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const paths = process.argv.slice(2);
+  let paths = process.argv.slice(2);
   if (!paths.length) {
-    console.error('usage: node tools/check-table.mjs tables/<id>.json [...]');
-    process.exit(2);
+    paths = JSON.parse(readFileSync('tables/index.json', 'utf8')).map((t) => `tables/${t.id}.json`);
   }
   let failed = false;
   for (const path of paths) {

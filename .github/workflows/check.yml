@@ -9,10 +9,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           # Pinned so the seeded smoke test gives the same results every run.
           node-version: 22.22.0
       - run: node --test
-      - run: node tools/check-table.mjs tables/*.json
+      - run: node tools/check-table.mjs

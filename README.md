@@ -31,7 +31,7 @@ node tools/check-table.mjs tables/<id>.json
 
 ```bash
 node --test
-node tools/check-table.mjs tables/*.json
+node tools/check-table.mjs
 ```
 
 ## Credits and license

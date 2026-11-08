@@ -33,5 +33,5 @@ Four rules after the community "Karpathy guidelines" (MIT), reworded for agents 
 
 ```bash
 node --test
-node tools/check-table.mjs tables/*.json
+node tools/check-table.mjs
 ```
