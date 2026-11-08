@@ -196,16 +196,16 @@ When Claude writes a new table, it must pass the checker before the pull request
 
 ## v1 checklist
 
-- [ ] Loader, physics and the 8 element types
-- [ ] Classic, Round and Round, Ringmaster, with their rules rewritten in JS
-- [ ] One new table written by Claude from the owner's description
-- [ ] Table picker, the look in both themes, fake depth
-- [ ] Touch, keyboard, nudge and tilt
-- [ ] Sound with a mute button
-- [ ] High scores on the device
-- [ ] Table checker plus CI
-- [ ] README with credits, LICENSE (GPL-3.0), AGENTS.md
-- [ ] Owner's Cloudflare setup steps
+- [x] Loader, physics and the 8 element types
+- [x] Classic, Round and Round, Ringmaster, with their rules rewritten in JS
+- [x] One new table written by Claude from the owner's description
+- [x] Table picker, the look in both themes, fake depth
+- [x] Touch, keyboard, nudge and tilt
+- [x] Sound with a mute button
+- [x] High scores on the device
+- [x] Table checker plus CI
+- [x] README with credits, LICENSE (GPL-3.0), AGENTS.md
+- [x] Owner's Cloudflare setup steps
 
 ### Pull requests
 
