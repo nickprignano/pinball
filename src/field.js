@@ -102,6 +102,7 @@ export class Field {
     this.balls = [];
     this.state.inProgress = false;
     this.showGameMessage('Game Over', 2500);
+    this.audio.play('gameOver');
     this.delegate.gameEnded?.(this);
   }
 
@@ -177,6 +178,7 @@ export class Field {
   }
 
   doBallLost() {
+    this.tilted = false;
     this.lostBallRealMs = this.realTimeMs;
     this.usedMercyBall = false;
     this.multiballStartMs = null;
@@ -200,6 +202,7 @@ export class Field {
     } else {
       this.endGame();
     }
+    this.audio.play('ballLost');
     this.delegate.ballLost?.(this);
   }
 
@@ -207,9 +210,29 @@ export class Field {
     return this.lostBallRealMs != null && this.realTimeMs - this.lostBallRealMs <= ms;
   }
 
+  // Nudging gives the balls a small push. Three nudges within 2 seconds tilt the table:
+  // the flippers stop working and the ball drains with no ball saver.
+  nudge() {
+    if (!this.state.inProgress || this.tilted || !this.balls.length) return;
+    this.nudgeTimes = (this.nudgeTimes ?? []).filter((t) => this.realTimeMs - t < 2000);
+    this.nudgeTimes.push(this.realTimeMs);
+    if (this.nudgeTimes.length >= 3) {
+      this.tilted = true;
+      this.nudgeTimes = [];
+      this.usedMercyBall = true;
+      this.multiballStartMs = null;
+      this.setAllFlippersEngaged(false);
+      this.showGameMessage('Tilt', 2000);
+      return;
+    }
+    for (const b of this.balls) b.applyLinearImpulse(Vec2((this.random() - 0.5) * 1, 0.8));
+    this.audio.play('nudge');
+  }
+
   // Flippers
 
   setFlippersEngaged(flippers, engaged) {
+    if (this.tilted) engaged = false;
     const activated = engaged ? flippers.filter((f) => !f.isFlipperEngaged()) : [];
     for (const f of flippers) f.setFlipperEngaged(engaged);
     if (activated.length) {
@@ -382,9 +405,9 @@ export class Field {
   }
 
   // Draw order follows upstream: walls and targets, then balls, then bumpers on top.
-  draw(renderer) {
+  draw(renderer, include = () => true) {
     const rank = (e) => (e instanceof Ball ? 3 : e instanceof BumperElement ? 4 : 2);
-    const items = [...this.elements, ...this.balls].sort((a, b) => a.layer - b.layer || rank(a) - rank(b));
+    const items = [...this.elements.filter(include), ...this.balls].sort((a, b) => a.layer - b.layer || rank(a) - rank(b));
     for (const item of items) item.draw(this, renderer);
   }
 }

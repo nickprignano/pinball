@@ -2,15 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pinball</title>
-  <style>
-    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; overscroll-behavior: none; }
-    canvas { display: block; width: 100vw; height: 100vh; height: 100dvh; touch-action: none; }
-  </style>
+  <meta name="description" content="Open-source pinball in the browser, playing Vector Pinball tables.">
+  <script>
+    // Apply the saved light/dark choice before the first paint, like prignano-theme's THEME_INIT_SCRIPT.
+    (function () { try { var m = document.cookie.match(/(?:^|; )theme=(light|dark)/); var t = m ? m[1] : localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {} })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <!-- The shared site theme. If it can't load, styles.css has the same colors as a fallback. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/nickprignano/prignano-theme@4c2effc3829269e40ad663baf130a6b899a402bb/theme.css">
 </head>
 <body>
-  <canvas id="game" aria-label="Pinball table. Tap the left or right half, or press Z and slash, to flip."></canvas>
+  <div id="site-header"></div>
+  <main id="app">
+    <div class="hud" role="toolbar" aria-label="Game controls">
+      <div class="hud-stats" aria-live="polite">
+        <span class="hud-score" id="score">0</span>
+        <span class="hud-ball" id="ball"></span>
+      </div>
+      <button type="button" id="btn-tables" aria-label="Choose a table">Tables</button>
+      <button type="button" id="btn-pause" aria-label="Pause">Pause</button>
+      <button type="button" id="btn-mute" aria-label="Mute sound" aria-pressed="false">Sound</button>
+      <button type="button" id="btn-header" aria-label="Hide the site header" aria-expanded="true">▴</button>
+    </div>
+    <div class="stage">
+      <canvas id="game" aria-label="Pinball table. Tap the left or right half, or press Z and slash, to flip."></canvas>
+      <button type="button" id="btn-nudge" class="nudge" aria-label="Nudge the table">Nudge</button>
+      <div id="countdown" class="countdown" hidden></div>
+    </div>
+    <p class="rotate-note">Turn your phone upright to play.</p>
+  </main>
+
+  <dialog id="menu" aria-labelledby="menu-title">
+    <h2 id="menu-title">Pinball</h2>
+    <p class="muted">Pick a table. Tap each half of the table, or press <kbd>Z</kbd> and <kbd>/</kbd>, to flip. <kbd>Space</kbd> or the Nudge button nudges, but three nudges in two seconds tilts.</p>
+    <ul id="table-list" class="table-list"></ul>
+    <p class="muted small"><a href="#" id="about-link">About and credits</a></p>
+  </dialog>
+
+  <dialog id="paused" aria-labelledby="paused-title">
+    <h2 id="paused-title">Paused</h2>
+    <div class="actions">
+      <button type="button" id="btn-resume" class="primary">Resume</button>
+      <button type="button" id="btn-quit">End game</button>
+    </div>
+  </dialog>
+
+  <dialog id="gameover" aria-labelledby="gameover-title">
+    <h2 id="gameover-title">Game over</h2>
+    <p class="final-score" id="final-score"></p>
+    <form id="initials-form" method="dialog" hidden>
+      <label for="initials">New high score! Your initials</label>
+      <div class="actions">
+        <input id="initials" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+    <ol id="high-scores" class="high-scores"></ol>
+    <div class="actions">
+      <button type="button" id="btn-again" class="primary">Play again</button>
+      <button type="button" id="btn-change">Change table</button>
+    </div>
+  </dialog>
+
+  <dialog id="about" aria-labelledby="about-title">
+    <h2 id="about-title">About</h2>
+    <p>This game is free software under the GNU General Public License version 3. Its engine and
+      tables are a JavaScript port of <a href="https://github.com/dozingcat/Vector-Pinball">Vector Pinball</a>
+      by dozingcat (GPL-3.0). Physics by <a href="https://github.com/piqnt/planck.js">planck.js</a> (MIT).</p>
+    <p><a href="https://github.com/nickprignano/pinball">Source code</a></p>
+    <div class="actions"><button type="button" id="btn-about-close" class="primary">Close</button></div>
+  </dialog>
+
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

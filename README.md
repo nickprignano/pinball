@@ -9,8 +9,17 @@ and open `index.html`. The plan is in [docs/SPEC.md](docs/SPEC.md).
 
 ## Controls
 
-- Phone: tap the left or right half of the screen to flip. Any tap launches a ball.
-- Keyboard: Z or Left Shift (left flipper), / or Right Shift (right flipper), Enter to launch.
+- Phone: tap the left or right half of the screen to flip. Any tap launches a ball. The Nudge
+  button nudges the table. Play holds the phone upright.
+- Keyboard: Z, Left Shift or Left arrow (left flipper), /, Right Shift or Right arrow (right
+  flipper), Enter to launch, Space to nudge, P or Esc to pause, M to mute.
+- Three nudges within 2 seconds tilt the table: the flippers stop until the ball drains.
+
+The table is drawn in the [prignano-theme](https://github.com/nickprignano/prignano-theme) colors
+and follows its light/dark switch. The theme's stylesheet and site header load at runtime from a
+pinned commit; if they can't load, `styles.css` has the same colors and the game works without
+the header. Sounds are synthesized in the browser. High scores (top 10 per table) stay on the
+player's device.
 
 ## Tables
 
