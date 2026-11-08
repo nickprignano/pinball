@@ -20,6 +20,8 @@ optional `<id>.js` with the table's rules. `tables/index.json` lists the ones th
 | Table | Source |
 | --- | --- |
 | Classic | Vector Pinball table 1, rules rewritten from `Field1Delegate` |
+| Round and Round | Vector Pinball table 2, rules rewritten from `Field2Delegate` |
+| Ringmaster | Vector Pinball table 3, rules rewritten from `Field3Delegate` |
 
 Check a table before adding it:
 
