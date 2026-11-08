@@ -21,6 +21,19 @@ pinned commit; if they can't load, `styles.css` has the same colors and the game
 the header. Sounds are synthesized in the browser. High scores (top 10 per table) stay on the
 player's device.
 
+## Install as an app
+
+The game is an installable web app. On Android (Chrome), use the menu's **Install app** or the
+**Install as an app** button in the table menu. On iPhone and iPad (Safari), tap **Share**, then
+**Add to Home Screen**. Once installed it opens full screen without the browser bar and plays
+offline.
+
+`sw.js` keeps a copy of every game file. After changing any game file, run
+`node tools/sw-version.mjs`: it updates the file list and version in `sw.js`, and `node --test`
+fails until you do. Players get the new version through **Update the game** in the table menu, or
+the next time they open the app. The icons are drawn in `icons/icon.svg`; after changing it, run
+`node tools/make-icons.mjs` (needs Playwright) to redraw the PNGs.
+
 ## Tables
 
 Tables live in `tables/` as `<id>.json` (the layout, unchanged Vector Pinball format) plus an

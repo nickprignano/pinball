@@ -19,9 +19,13 @@ export class Audio {
     this.ctx = null;
   }
 
-  // Browsers only allow sound after the player has tapped or pressed a key.
+  // Browsers only allow sound after the player has tapped or pressed a key. iOS also suspends
+  // sound after the phone locks or the app goes to the background, so each tap resumes it.
   unlock() {
-    if (this.ctx) return;
+    if (this.ctx) {
+      if (this.ctx.state !== 'running') this.ctx.resume().catch(() => {});
+      return;
+    }
     const AudioContext = globalThis.AudioContext || globalThis.webkitAudioContext;
     if (AudioContext) this.ctx = new AudioContext();
   }

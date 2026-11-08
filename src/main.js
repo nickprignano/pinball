@@ -15,7 +15,62 @@ const canvas = $('game');
 const audio = new Audio();
 const scores = new Scores();
 const renderer = new CanvasRenderer(canvas, Palette.fromDocument());
-const tables = await (await fetch('tables/index.json')).json();
+const installed = matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches || navigator.standalone === true;
+
+// Installable app: sw.js keeps every game file so it plays offline. A new version downloads in the
+// background, and the table menu offers it; it never reloads the page by itself.
+let updateWaiting = null;
+let installPrompt = null;
+let reloadOnUpdate = false;
+function showAppActions() {
+  $('btn-update').hidden = !updateWaiting;
+  $('btn-install').hidden = !installPrompt;
+  $('app-actions').hidden = !updateWaiting && !installPrompt;
+  // iPhone and iPad have no install button: Safari's Share menu does it.
+  const apple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  $('ios-install').hidden = installed || !apple;
+}
+showAppActions();
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then((registration) => {
+    const watch = (worker) => worker?.addEventListener('statechange', () => {
+      if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+        updateWaiting = worker;
+        showAppActions();
+      }
+    });
+    if (registration.waiting && navigator.serviceWorker.controller) updateWaiting = registration.waiting;
+    watch(registration.installing);
+    registration.addEventListener('updatefound', () => watch(registration.installing));
+    // Installed apps are reopened rather than reloaded, so look for a new version each time.
+    document.addEventListener('visibilitychange', () => document.hidden || registration.update().catch(() => {}));
+    showAppActions();
+  }).catch(() => {});
+  navigator.serviceWorker.addEventListener('controllerchange', () => reloadOnUpdate && location.reload());
+}
+$('btn-update').addEventListener('click', () => {
+  reloadOnUpdate = true;
+  updateWaiting.postMessage('skip-waiting');
+});
+addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  installPrompt = event;
+  showAppActions();
+});
+$('btn-install').addEventListener('click', async () => {
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null;
+  showAppActions();
+});
+
+let tables;
+try {
+  tables = await (await fetch('tables/index.json')).json();
+} catch {
+  document.body.textContent = "Pinball couldn't load. Check your connection and try again.";
+  throw new Error('tables/index.json did not load');
+}
 
 let current = null; // { id, name, table, rules }
 let field = null;
@@ -165,7 +220,7 @@ function toggleMute() {
 }
 $('btn-mute').addEventListener('click', toggleMute);
 updateMuteButton();
-for (const type of ['pointerdown', 'keydown']) addEventListener(type, () => audio.unlock(), { once: true });
+for (const type of ['pointerdown', 'keydown']) addEventListener(type, () => audio.unlock());
 
 // Controls
 
@@ -181,13 +236,15 @@ $('btn-nudge').addEventListener('click', () => isPlaying() && field.nudge());
 
 // Site header from prignano-theme, loaded at runtime so this repo carries no personal details.
 // The game works without it.
-$('btn-header').addEventListener('click', () => {
-  const header = $('site-header');
-  const collapsed = header.classList.toggle('collapsed');
+function setHeaderCollapsed(collapsed) {
+  $('site-header').classList.toggle('collapsed', collapsed);
   $('btn-header').textContent = collapsed ? '▾' : '▴';
   $('btn-header').setAttribute('aria-expanded', String(!collapsed));
   $('btn-header').setAttribute('aria-label', collapsed ? 'Show the site header' : 'Hide the site header');
-});
+}
+$('btn-header').addEventListener('click', () => setHeaderCollapsed(!$('site-header').classList.contains('collapsed')));
+// The installed app starts with the header hidden, to leave the screen to the table.
+if (installed) setHeaderCollapsed(true);
 import(THEME_MODULE)
   .then(({ headerHtml, initThemeToggle }) => {
     $('site-header').innerHTML = headerHtml({ bio: 'Pinball, open source', links: [] });
@@ -195,9 +252,16 @@ import(THEME_MODULE)
   })
   .catch(() => $('btn-header').remove());
 
-onThemeChange(() => renderer.setPalette(Palette.fromDocument()));
+// The phone's status bar takes the page background (theme-color), in both themes.
+function applyTheme() {
+  renderer.setPalette(Palette.fromDocument());
+  const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+  if (bg) document.querySelector('meta[name="theme-color"]').content = bg;
+}
+onThemeChange(applyTheme);
 // The shared theme stylesheet may finish loading after this script starts.
-addEventListener('load', () => renderer.setPalette(Palette.fromDocument()));
+addEventListener('load', applyTheme);
+applyTheme();
 new ResizeObserver(() => field && renderer.layout(field)).observe(canvas);
 
 // Pause when the tab is hidden.

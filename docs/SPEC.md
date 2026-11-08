@@ -223,7 +223,7 @@ scores points.
 ## Not in v1
 
 Shared leaderboard, tables 4-9, spinners and ramps, a table editor in the browser, music,
-tilting the phone to nudge, and installing the game as an app.
+and tilting the phone to nudge. Installing the game as an app came after v1 (see the README).
 
 ## Open questions
 

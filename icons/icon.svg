@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Pinball app icon: original artwork for this game (GPL-3.0-only, like the rest of the repo). -->
+  <rect width="512" height="512" fill="#0d1117"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- bumpers -->
+    <circle cx="186" cy="196" r="38" stroke="#3fb950" stroke-width="14"/>
+    <circle cx="326" cy="196" r="38" stroke="#3fb950" stroke-width="14"/>
+    <circle cx="256" cy="120" r="30" stroke="#3fb950" stroke-width="12" opacity="0.7"/>
+    <!-- flippers -->
+    <path d="M150 372 L238 420" stroke="#e6edf3" stroke-width="26"/>
+    <path d="M362 372 L274 420" stroke="#e6edf3" stroke-width="26"/>
+  </g>
+  <!-- ball -->
+  <circle cx="256" cy="292" r="36" fill="#58a6ff"/>
+  <circle cx="244" cy="280" r="11" fill="#e6edf3" opacity="0.6"/>
+</svg>

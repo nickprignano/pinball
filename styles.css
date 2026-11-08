@@ -37,7 +37,7 @@ body { display: flex; flex-direction: column; height: 100dvh; }
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px max(12px, env(safe-area-inset-left));
+  padding: 6px max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left));
   border-bottom: 1px solid var(--border);
 }
 .hud-stats { margin-right: auto; display: flex; align-items: baseline; column-gap: 12px; flex-wrap: wrap; min-width: 0; }
@@ -54,6 +54,7 @@ button {
   padding: 6px 12px;
   cursor: pointer;
   white-space: nowrap;
+  touch-action: manipulation; /* fast taps on Nudge shouldn't zoom the page on iOS */
 }
 @media (max-width: 480px) {
   .hud { gap: 6px; }
@@ -77,7 +78,7 @@ button.primary { background: var(--accent); border-color: var(--accent); color: 
 .nudge {
   position: absolute;
   left: 50%;
-  bottom: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
   transform: translateX(-50%);
   opacity: 0.75;
 }

@@ -9,6 +9,15 @@
     // Apply the saved light/dark choice before the first paint, like prignano-theme's THEME_INIT_SCRIPT.
     (function () { try { var m = document.cookie.match(/(?:^|; )theme=(light|dark)/); var t = m ? m[1] : localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {} })();
   </script>
+  <!-- Installable app (PWA): manifest, icons, iOS home-screen tags. sw.js keeps it playable offline. -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Pinball">
   <link rel="stylesheet" href="styles.css">
   <!-- The shared site theme. If it can't load, styles.css has the same colors as a fallback. -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/nickprignano/prignano-theme@4c2effc3829269e40ad663baf130a6b899a402bb/theme.css">
@@ -38,6 +47,11 @@
     <h2 id="menu-title">Pinball</h2>
     <p class="muted">Pick a table. Tap each half of the table, or press <kbd>Z</kbd> and <kbd>/</kbd>, to flip. <kbd>Space</kbd> or the Nudge button nudges, but three nudges in two seconds tilts.</p>
     <ul id="table-list" class="table-list"></ul>
+    <p class="actions" id="app-actions" hidden>
+      <button type="button" id="btn-update" class="primary" hidden>Update the game</button>
+      <button type="button" id="btn-install" hidden>Install as an app</button>
+    </p>
+    <p class="muted small" id="ios-install" hidden>To install: tap Share, then Add to Home Screen.</p>
     <p class="muted small"><a href="#" id="about-link">About and credits</a></p>
   </dialog>
 
