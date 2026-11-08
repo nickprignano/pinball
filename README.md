@@ -31,12 +31,18 @@ optional `<id>.js` with the table's rules. `tables/index.json` lists the ones th
 | Classic | Vector Pinball table 1, rules rewritten from `Field1Delegate` |
 | Round and Round | Vector Pinball table 2, rules rewritten from `Field2Delegate` |
 | Ringmaster | Vector Pinball table 3, rules rewritten from `Field3Delegate` |
+| Deep Orbit | Original table for this game: fly five missions to climb the ranks, with multiball at Navigator. Its walls start from Classic's outline |
 
 Check a table before adding it:
 
 ```bash
 node tools/check-table.mjs tables/<id>.json
 ```
+
+## Hosting
+
+Cloudflare Workers static assets serves the folder as-is. Setup steps are in
+[docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Checks
 

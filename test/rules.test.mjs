@@ -55,3 +55,30 @@ test('Ringmaster: energy and both target banks light multiball, then a ramp star
   runFor(field, 4000 / field.targetTimeRatio);
   assert.ok(field.balls.length >= 2, `balls: ${field.balls.length}`);
 });
+
+test('Deep Orbit: missions raise rank, Navigator starts multiball, all five give an extra ball', async () => {
+  const { field, rules, el } = await load('deep-orbit');
+  const bumpers = field.elements.filter((e) => e.constructor.name === 'BumperElement');
+  const planet = bumpers.find((b) => !b.getElementId());
+  const moon = el('Moon');
+  const settle = () => runFor(field, 3000 / field.targetTimeRatio);
+
+  for (let i = 0; i < 8; i++) rules.processCollision(field, planet);
+  assert.equal(field.message.text, 'Mission complete: Pilot');
+  assert.equal(el('RankLights').isRolloverActiveAtIndex(0), true);
+  settle();
+
+  rules.allRolloversInGroupActivated(field, el('OrbitLights'));
+  assert.equal(field.message.text, 'Navigator! Multiball');
+  runFor(field, 4000 / field.targetTimeRatio);
+  assert.ok(field.balls.length >= 2, `balls: ${field.balls.length}`);
+
+  rules.allDropTargetsInGroupHit(field, el('AsteroidTargets'));
+  settle();
+  rules.allRolloversInGroupActivated(field, el('LaunchLanes'));
+  settle();
+  // The live ball may hit the moon too, so hit it until the last mission completes.
+  for (let i = 0; i < 3 && field.state.extraBalls === 0; i++) rules.processCollision(field, moon);
+  assert.equal(el('RankLights').allRolloversActive(), false);
+  assert.equal(field.state.extraBalls, 1);
+});
