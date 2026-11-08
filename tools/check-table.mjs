@@ -41,9 +41,10 @@ export async function checkTable(path, { balls = 30, seed = 1 } = {}) {
     for (const name of Object.keys(rules)) {
       if (!RULE_HOOKS.has(name)) problems.push(`rules export "${name}", which isn't a known hook`);
     }
+    const probe = new Field(table, { rules });
     const source = readFileSync(rulesPath, 'utf8');
     for (const [, method] of source.matchAll(/\bfield\.(\w+)\s*\(/g)) {
-      if (typeof Field.prototype[method] !== 'function') problems.push(`rules call field.${method}(), which doesn't exist`);
+      if (typeof probe[method] !== 'function') problems.push(`rules call field.${method}(), which doesn't exist`);
     }
   }
 

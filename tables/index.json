@@ -1,3 +1,5 @@
 [
-  { "id": "classic", "name": "Classic", "source": "Vector Pinball table 1" }
+  { "id": "classic", "name": "Classic", "source": "Vector Pinball table 1" },
+  { "id": "round-and-round", "name": "Round and Round", "source": "Vector Pinball table 2" },
+  { "id": "ringmaster", "name": "Ringmaster", "source": "Vector Pinball table 3" }
 ]
