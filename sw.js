@@ -2,7 +2,7 @@
 // VERSION and FILES are written by `node tools/sw-version.mjs`; a test fails if they're stale.
 // Part of a JS port of Vector Pinball (https://github.com/dozingcat/Vector-Pinball), GPL-3.0-only.
 
-const VERSION = '887e01d86f30';
+const VERSION = 'b584ecf12c85';
 const FILES = [
   'icons/apple-touch-icon.png',
   'icons/icon-192.png',
@@ -33,14 +33,17 @@ const FILES = [
   'src/three/view.js',
   'src/util.js',
   'styles.css',
+  'tables/classic.art.js',
   'tables/classic.js',
   'tables/classic.json',
   'tables/deep-orbit.art.js',
   'tables/deep-orbit.js',
   'tables/deep-orbit.json',
   'tables/index.json',
+  'tables/ringmaster.art.js',
   'tables/ringmaster.js',
   'tables/ringmaster.json',
+  'tables/round-and-round.art.js',
   'tables/round-and-round.js',
   'tables/round-and-round.json',
   'vendor/planck.mjs',

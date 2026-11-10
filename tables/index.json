@@ -1,6 +1,6 @@
 [
-  { "id": "classic", "name": "Classic", "source": "Vector Pinball table 1" },
-  { "id": "round-and-round", "name": "Round and Round", "source": "Vector Pinball table 2" },
-  { "id": "ringmaster", "name": "Ringmaster", "source": "Vector Pinball table 3" },
+  { "id": "classic", "name": "Classic", "source": "Vector Pinball table 1", "art": true },
+  { "id": "round-and-round", "name": "Round and Round", "source": "Vector Pinball table 2", "art": true },
+  { "id": "ringmaster", "name": "Ringmaster", "source": "Vector Pinball table 3", "art": true },
   { "id": "deep-orbit", "name": "Deep Orbit", "source": "Original table for this game", "art": true }
 ]
