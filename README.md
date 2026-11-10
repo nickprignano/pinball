@@ -57,11 +57,30 @@ node tools/check-table.mjs tables/<id>.json
 Cloudflare Workers static assets serves the folder as-is. Setup steps are in
 [docs/DEPLOY.md](docs/DEPLOY.md).
 
+## 3D view
+
+Pick **Graphics** in the table menu: Flat (the line drawing), 3D (starts on high quality and
+steps down if frames are slow), or 3D high or low. `?gfx=flat|auto|high|low` in the address
+overrides it for testing, and `?fps=1` shows the frame time. The plan is in
+[docs/SPEC-3D.md](docs/SPEC-3D.md).
+
+The 3D view draws the same game with [three.js](https://github.com/mrdoob/three.js); physics and
+rules don't change. Raised plastics are worked out from where the ball can't go. A table's
+playfield art is drawn in code in `tables/<id>.art.js`, marked with `"art": true` in
+`tables/index.json`; without one, a plain default is used.
+
+- `node tools/vendor-three.mjs` refreshes `vendor/three/` from the npm package, checked against
+  its published hash. Change the version and hash in the tool to upgrade.
+- `node tools/check-3d.mjs [folder] [table]` plays every table in 3D in a headless browser
+  (needs Playwright) and saves screenshots. Run it before a pull request that touches the 3D
+  view.
+
 ## Checks
 
 ```bash
 node --test
 node tools/check-table.mjs
+node tools/check-3d.mjs   # when the 3D view changed; needs Playwright
 ```
 
 ## Credits and license
@@ -72,5 +91,8 @@ node tools/check-table.mjs
   `vendor/planck.mjs` (the `dist/planck.mjs` file of the
   [npm package](https://www.npmjs.com/package/planck/v/1.5.1)) with its license in
   `vendor/planck.LICENSE`.
+- 3D view: [three.js](https://github.com/mrdoob/three.js) r187 (MIT), the `three@0.187.0` npm
+  package's `build/three.core.js`, `build/three.module.js` and a few add-ons, vendored unminified
+  in `vendor/three/` with its license in `vendor/three/LICENSE`.
 - This project is licensed under the GNU General Public License version 3 only (GPL-3.0-only);
   see [LICENSE](LICENSE).

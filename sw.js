@@ -2,7 +2,7 @@
 // VERSION and FILES are written by `node tools/sw-version.mjs`; a test fails if they're stale.
 // Part of a JS port of Vector Pinball (https://github.com/dozingcat/Vector-Pinball), GPL-3.0-only.
 
-const VERSION = '8ed39c799fdd';
+const VERSION = '887e01d86f30';
 const FILES = [
   'icons/apple-touch-icon.png',
   'icons/icon-192.png',
@@ -27,10 +27,15 @@ const FILES = [
   'src/render.js',
   'src/scores.js',
   'src/theme.js',
+  'src/three/art.js',
+  'src/three/geometry.js',
+  'src/three/parts.js',
+  'src/three/view.js',
   'src/util.js',
   'styles.css',
   'tables/classic.js',
   'tables/classic.json',
+  'tables/deep-orbit.art.js',
   'tables/deep-orbit.js',
   'tables/deep-orbit.json',
   'tables/index.json',
@@ -39,6 +44,19 @@ const FILES = [
   'tables/round-and-round.js',
   'tables/round-and-round.json',
   'vendor/planck.mjs',
+  'vendor/three/addons/environments/RoomEnvironment.js',
+  'vendor/three/addons/postprocessing/EffectComposer.js',
+  'vendor/three/addons/postprocessing/MaskPass.js',
+  'vendor/three/addons/postprocessing/OutputPass.js',
+  'vendor/three/addons/postprocessing/Pass.js',
+  'vendor/three/addons/postprocessing/RenderPass.js',
+  'vendor/three/addons/postprocessing/ShaderPass.js',
+  'vendor/three/addons/postprocessing/UnrealBloomPass.js',
+  'vendor/three/addons/shaders/CopyShader.js',
+  'vendor/three/addons/shaders/LuminosityHighPassShader.js',
+  'vendor/three/addons/shaders/OutputShader.js',
+  'vendor/three/three.core.js',
+  'vendor/three/three.module.js',
 ];
 // The shared theme, pinned to a commit so it never changes. Kept if it loads, skipped if not.
 const EXTRA = [

@@ -43,6 +43,7 @@ export function attachInput(target, actions) {
     field.setRightFlippersEngaged(sides.includes('right'));
   };
   target.addEventListener('pointerdown', (event) => {
+    if (event.target.closest?.('button')) return;
     event.preventDefault();
     target.setPointerCapture?.(event.pointerId);
     const rect = target.getBoundingClientRect();
