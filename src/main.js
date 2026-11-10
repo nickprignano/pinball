@@ -111,7 +111,7 @@ function readGfx() {
   } catch {
     // Storage blocked: use the default.
   }
-  return 'flat';
+  return 'auto';
 }
 
 async function setGfx(value) {
@@ -446,7 +446,7 @@ function frame(now) {
       watchFrameTime(now, dt);
       if (pendingTier && field.balls.length === 0) {
         const next = pendingTier;
-        switchTier(next === 'flat' ? null : next, next === 'flat' ? 'Switched to the flat view to keep the game smooth.' : null);
+        switchTier(next === 'flat' ? null : next, next === 'flat' ? 'Switched to the flat view to keep the game smooth. Tables, then Graphics, brings 3D back.' : null);
       }
     } else if (!view) {
       renderer.frame(field);

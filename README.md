@@ -59,15 +59,16 @@ Cloudflare Workers static assets serves the folder as-is. Setup steps are in
 
 ## 3D view
 
-Pick **Graphics** in the table menu: Flat (the line drawing), 3D (starts on high quality and
-steps down if frames are slow), or 3D high or low. `?gfx=flat|auto|high|low` in the address
-overrides it for testing, and `?fps=1` shows the frame time. The plan is in
-[docs/SPEC-3D.md](docs/SPEC-3D.md).
+The table is drawn in 3D by default. **Graphics** in the table menu offers 3D (starts on high
+quality and steps down between balls if frames are slow, down to Flat), 3D high or low, or Flat
+(the original line drawing). Flat is also used when a device can't run 3D.
+`?gfx=flat|auto|high|low` in the address overrides it for testing, and `?fps=1` shows the frame
+time. The plan is in [docs/SPEC-3D.md](docs/SPEC-3D.md).
 
 The 3D view draws the same game with [three.js](https://github.com/mrdoob/three.js); physics and
 rules don't change. Raised plastics are worked out from where the ball can't go. A table's
 playfield art is drawn in code in `tables/<id>.art.js`, marked with `"art": true` in
-`tables/index.json`; without one, a plain default is used.
+`tables/index.json`; without one, a plain default is used. All four tables have their own art.
 
 - `node tools/vendor-three.mjs` refreshes `vendor/three/` from the npm package, checked against
   its published hash. Change the version and hash in the tool to upgrade.
