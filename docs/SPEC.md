@@ -2,6 +2,8 @@
 
 Status: draft, red-teamed once, waiting for the owner's approval. Nothing gets built until it's approved.
 
+The 3D upgrade is planned in [SPEC-3D.md](SPEC-3D.md).
+
 ## What it is
 
 A browser pinball game for `pinball.prignano.ai`. It plays tables written in the
