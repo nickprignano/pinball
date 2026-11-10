@@ -160,8 +160,8 @@ async function switchTier(next, note) {
 }
 
 // If the GPU drops the 3D view's context and doesn't give it back within 3 seconds, go flat.
-function onContextLost() {
-  const lost = view;
+function onContextLost(lost) {
+  if (lost !== view) return;
   lost.lost = true;
   lost.canvas.addEventListener('webglcontextrestored', () => view === lost && switchTier(tier), { once: true });
   setTimeout(() => view === lost && lost.lost && switchTier(null, 'The 3D view stopped, so the table is drawn flat.'), 3000);

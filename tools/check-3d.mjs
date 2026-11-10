@@ -1,8 +1,9 @@
 // Browser check for the 3D view (needs Playwright; run it before each pull request that touches
 // the 3D view). Serves the repo, then for each table and each 3D quality tier: loads it, launches
 // a ball, plays a few seconds with scripted flips, and fails on any page error, a blank frame or a
-// fall back to the flat view. Saves phone and desktop screenshots to the folder given as the
-// first argument (default: a temp folder).
+// fall back to the flat view. The last run per table drains the ball and steps quality down from
+// high to low, as Auto does on a slow phone. Saves phone and desktop screenshots to the folder
+// given as the first argument (default: a temp folder).
 // Usage: node tools/check-3d.mjs [screenshot-folder] [table-id]
 
 import { mkdirSync, readFileSync } from 'node:fs';
@@ -39,10 +40,11 @@ const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--ena
 const failures = [];
 
 for (const table of tables) {
-  for (const [label, options, tier] of [
+  for (const [label, options, tier, start = tier] of [
     ['phone', { ...devices['iPhone 13'] }, 'high'],
     ['desktop', { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 }, 'high'],
     ['phone-low', { ...devices['iPhone 13'] }, 'low'],
+    ['phone-drain-step-down', { ...devices['iPhone 13'] }, 'low', 'high'],
   ]) {
     const name = `${table.id}-${label}`;
     const page = await browser.newPage(options);
@@ -52,7 +54,7 @@ for (const table of tables) {
     page.on('console', (m) => m.type() === 'error' && !m.text().includes('net::ERR_FAILED') && errors.push(m.text()));
     // The theme files come from a CDN; the game works without them, so don't wait on them.
     await page.route(/cdn\.jsdelivr\.net/, (route) => route.abort());
-    await page.goto(`${base}/?table=${table.id}&gfx=${tier}`);
+    await page.goto(`${base}/?table=${table.id}&gfx=${start}`);
     await page.waitForFunction(() => globalThis.pinball?.view?.tableId, null, { timeout: 30000 }).catch(() => {});
     const started = await page.evaluate(() => Boolean(globalThis.pinball?.view?.tableId));
     if (started) {
@@ -71,8 +73,20 @@ for (const table of tables) {
         }, 30);
       });
       await page.waitForTimeout(6000);
+      if (start !== tier) {
+        // Lose the ball (no ball saver), then switch quality while no ball is in play.
+        await page.evaluate((next) => {
+          const { field } = globalThis.pinball;
+          field.usedMercyBall = true;
+          for (const ball of [...field.balls]) field.removeBall(ball);
+          const select = document.getElementById('gfx');
+          select.value = next;
+          select.dispatchEvent(new Event('change'));
+        }, tier);
+        await page.waitForTimeout(5000);
+      }
     }
-    const state = await page.evaluate(() => ({ tier: globalThis.pinball?.tier, threeOn: document.body.classList.contains('three') }));
+    const state = await page.evaluate(() => ({ tier: globalThis.pinball?.tier, threeOn: document.body.classList.contains('three'), lost: globalThis.pinball?.view?.lost }));
     // A blank frame is one colour all over: sample the 3D canvas.
     const colours = await page.evaluate(() => {
       const { view } = globalThis.pinball;
@@ -93,7 +107,7 @@ for (const table of tables) {
     await page.screenshot({ path: join(outDir, `${name}.png`) });
     const problems = [];
     if (!started) problems.push('3D view never started');
-    if (state.tier !== tier || !state.threeOn) problems.push(`fell back (tier ${state.tier})`);
+    if (state.tier !== tier || !state.threeOn || state.lost) problems.push(`fell back (tier ${state.tier}${state.lost ? ', context marked lost' : ''})`);
     if (colours < 20) problems.push(`blank frame (${colours} colours)`);
     problems.push(...errors);
     console.log(`${problems.length ? 'FAIL' : 'ok  '} ${name}${problems.length ? `: ${problems.join('; ')}` : ''}`);

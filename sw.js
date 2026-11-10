@@ -2,7 +2,7 @@
 // VERSION and FILES are written by `node tools/sw-version.mjs`; a test fails if they're stale.
 // Part of a JS port of Vector Pinball (https://github.com/dozingcat/Vector-Pinball), GPL-3.0-only.
 
-const VERSION = 'b584ecf12c85';
+const VERSION = 'a1f9921ceaaf';
 const FILES = [
   'icons/apple-touch-icon.png',
   'icons/icon-192.png',
