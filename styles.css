@@ -145,3 +145,80 @@ kbd { border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; font-
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* Graphics choice in the table menu. */
+.gfx-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+.gfx-row select {
+  font: inherit;
+  color: var(--fg);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+/* 3D view: its own canvas in a dark room, with messages and score pop-ups in HTML on top. */
+.game-3d {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+body.three #game { display: none; }
+body.three .stage { background: #05070b; touch-action: none; }
+body.three .countdown { color: #fff; }
+.popups { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.popups span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+  font-variant-numeric: tabular-nums;
+}
+.table-message {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(5, 7, 11, 0.82);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  pointer-events: none;
+}
+.fps {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font: 12px ui-monospace, monospace;
+  pointer-events: none;
+}
+
+/* The score as a dot-matrix style panel while the table is in 3D. */
+body.three .hud-score {
+  padding: 2px 12px;
+  border-radius: 6px;
+  color: #ffab3d;
+  background-color: #150b02;
+  background-image: radial-gradient(rgba(255, 171, 61, 0.14) 0.8px, transparent 1.1px);
+  background-size: 3px 3px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 6px rgba(255, 140, 20, 0.75);
+}

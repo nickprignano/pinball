@@ -37,8 +37,11 @@
     </div>
     <div class="stage">
       <canvas id="game" aria-label="Pinball table. Tap the left or right half, or press Z and slash, to flip."></canvas>
+      <div id="popups" class="popups" aria-hidden="true"></div>
+      <div id="table-message" class="table-message" role="status" hidden></div>
       <button type="button" id="btn-nudge" class="nudge" aria-label="Nudge the table">Nudge</button>
       <div id="countdown" class="countdown" hidden></div>
+      <div id="fps" class="fps" hidden></div>
     </div>
     <p class="rotate-note">Turn your phone upright to play.</p>
   </main>
@@ -47,6 +50,15 @@
     <h2 id="menu-title">Pinball</h2>
     <p class="muted">Pick a table. Tap each half of the table, or press <kbd>Z</kbd> and <kbd>/</kbd>, to flip. <kbd>Space</kbd> or the Nudge button nudges, but three nudges in two seconds tilts.</p>
     <ul id="table-list" class="table-list"></ul>
+    <p class="gfx-row">
+      <label for="gfx">Graphics</label>
+      <select id="gfx">
+        <option value="flat">Flat</option>
+        <option value="auto">3D</option>
+        <option value="high">3D, high quality</option>
+        <option value="low">3D, low quality</option>
+      </select>
+    </p>
     <p class="actions" id="app-actions" hidden>
       <button type="button" id="btn-update" class="primary" hidden>Update the game</button>
       <button type="button" id="btn-install" hidden>Install as an app</button>
@@ -84,7 +96,8 @@
     <h2 id="about-title">About</h2>
     <p>This game is free software under the GNU General Public License version 3. Its engine and
       tables are a JavaScript port of <a href="https://github.com/dozingcat/Vector-Pinball">Vector Pinball</a>
-      by dozingcat (GPL-3.0). Physics by <a href="https://github.com/piqnt/planck.js">planck.js</a> (MIT).</p>
+      by dozingcat (GPL-3.0). Physics by <a href="https://github.com/piqnt/planck.js">planck.js</a> (MIT). The 3D view is
+      drawn with <a href="https://github.com/mrdoob/three.js">three.js</a> (MIT).</p>
     <p><a href="https://github.com/nickprignano/pinball">Source code</a></p>
     <div class="actions"><button type="button" id="btn-about-close" class="primary">Close</button></div>
   </dialog>
