@@ -19,7 +19,7 @@ const DARK_TOKENS = { '--bg': '#0d1117', '--fg': '#e6edf3', '--muted': '#8b949e'
 export const supportsWebGL2 = () => Boolean(document.createElement('canvas').getContext('webgl2'));
 
 export class ThreeView {
-  // tier: 'high' or 'low'. onContextLost is called if the GPU drops the WebGL context.
+  // tier: 'high' or 'low'. onContextLost(view) is called if the GPU drops the WebGL context.
   constructor(stage, tier, { onContextLost } = {}) {
     this.stage = stage;
     this.tier = tier;
@@ -31,7 +31,8 @@ export class ThreeView {
     stage.prepend(this.canvas);
     this.canvas.addEventListener('webglcontextlost', (event) => {
       event.preventDefault();
-      onContextLost?.();
+      // dispose() drops the context on purpose; only a loss the GPU causes counts.
+      if (!this.disposed) onContextLost?.(this);
     });
 
     const high = tier === 'high';
@@ -151,6 +152,7 @@ export class ThreeView {
   }
 
   dispose() {
+    this.disposed = true;
     this.table?.dispose();
     this.environment.dispose();
     this.composer?.dispose();
