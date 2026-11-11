@@ -97,3 +97,9 @@ node tools/check-3d.mjs   # when the 3D view changed; needs Playwright
   in `vendor/three/` with its license in `vendor/three/LICENSE`.
 - This project is licensed under the GNU General Public License version 3 only (GPL-3.0-only);
   see [LICENSE](LICENSE).
+- Also offered under the MIT license: `tools/vendor-three.mjs`, `tools/check-3d.mjs` and the
+  three.js renderer setup in `src/three/view.js` (renderer, pixel-ratio cap, `compileAsync`,
+  dispose and the context-lost handling). They hold no Vector Pinball code, so the owner offers
+  them under MIT too, and other games here, such as
+  [Fast Path](https://github.com/nickprignano/fast-path), can reuse them under MIT. The rest of
+  `view.js` (camera fit, table build, palette) stays GPL-3.0-only.
